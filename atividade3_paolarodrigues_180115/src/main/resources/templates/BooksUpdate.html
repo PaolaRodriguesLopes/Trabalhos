@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Livros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</head>
+<header>
+    <div class="form-group">
+        <div class="col-12" style="padding-bottom: 8%; background-color: #003daa;">
+            <img src="logoFacens.png" class="img-fluid float-right" alt="Responsive image" style="width: 20%;">
+
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/">Início</a>
+                    <a class="nav-item nav-link" href="/authors">Autores </a>
+                    <a class="nav-item nav-link " href="/publishers">Editoras</a>
+                    <a class="nav-item nav-link active" href="/books">Livros</a>
+                    <a class="nav-item nav-link" href="/about">Sobre</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<body>
+    <div class="col-11">
+        <div class="modal-footer">
+            <h5 class="modal-title" style="margin-right: 40%;">Atualizar Livros</h5>
+        </div>
+        <form th:action="@{/insertBooks}" th:object="${book}" method="POST" id="formBooks">
+            <input type="hidden" th:value="${book.idBook}" name="idBook">
+            <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Título:</label>
+                <input type="text" class="form-control" id="titulo" th:value="${book.title}" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Preço:</label>
+              
+                <input type="text" class="form-control" id="preco" th:value="${book.price}" onclick="mask()" name="price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Editora:</label>
+                <select th:field="${book.publisher}" name="publisher" class="form-control" id="editora" required>
+                    <option value="">Escolha a Editora</option>
+                    <option th:each="p : ${publi}" th:value="${p.idPublisher}" th:text="${p.companyName}">
+
+                    </option>
+                </select>
+
+            </div>
+
+            <label for="recipient-name" class="col-form-label">Autor (es):</label>
+            <div th:each="author: ${book.authors}">
+
+                <div class="row" th:id="div_ + ${author.idAuthors}" style="padding-bottom: 1%;">
+                    <div class="col-11">
+                        <select name="authors" class="form-control" required>
+                            <option th:value="${author.idAuthors}" th:text="${author.name}" selected>Escolha o Autor
+                            </option>
+                            <option th:each="a : ${authorsB}" th:value="${a.idAuthors}" th:text="${a.name}">
+
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-1">
+                        <a th:onclick="'deletar(div_'+${author.idAuthors}+')'" style="cursor: pointer;"><svg
+                                class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                <path fill-rule="evenodd"
+                                    d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                                    clip-rule="evenodd" />
+                            </svg></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"><a href="/books"
+                        style="text-decoration: none; color: white;">Cancelar</a></button>
+                <button type="button" id="submitbtn" class="btn btn-primary" onclick="save()">Atualizar</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+    <script>
+        
+
+        function mask()
+        {
+            $('#preco').mask('###0.00', { reverse: true });
+        }
+
+        function save() {
+            if ($.trim($('#titulo').val()) == '') {
+                alert("Preencher Titulo !");
+            } else if ($.trim($('#preco').val()) == '') {
+                alert("Preencher Preço !");
+            } else if ($.trim($('#editora').val()) == '') {
+                alert("Preencher Editora !");
+            }
+            else {
+                document.getElementById('formBooks').submit();
+            }
+        }
+
+        function deletar(id) {
+            console.log("id === " + id)
+            $(id).remove();
+        }
+    </script>
+</body>
+
+</html>
